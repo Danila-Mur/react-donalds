@@ -13,7 +13,7 @@ const OrderStyled = styled.section`
   left: 0;
   display: flex;
   flex-direction: column;
-  min-width: 380px;
+  width: 380px;
   height: calc(100% - 80px);
   padding: 20px;
   background-color: #fff;
@@ -55,6 +55,11 @@ export const Order = ({ orders }) => {
     0
   );
 
+  const totalCounter = orders.reduce(
+    (result, order) => order.count + result,
+    0
+  );
+
   return (
     <>
       <OrderStyled>
@@ -72,7 +77,7 @@ export const Order = ({ orders }) => {
         </OrderContent>
         <Total>
           <span>ИТОГО</span>
-          <span>5</span>
+          <span>{totalCounter}</span>
           <TotalPrice>{formatCurrency(total, 'RUB')}</TotalPrice>
         </Total>
         <ButtonCheckout>Оформить</ButtonCheckout>
