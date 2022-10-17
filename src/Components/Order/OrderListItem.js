@@ -11,6 +11,7 @@ const OrderItemStyled = styled.li`
   flex-wrap: wrap;
   align-items: center;
   margin: 15px 0;
+  cursor: pointer;
 `;
 
 const ItemName = styled.span`
@@ -41,18 +42,34 @@ const Toppings = styled.div`
   font-size: 14px;
 `;
 
-export const OrderListItem = ({ order, removeOrderItem }) => {
+export const OrderListItem = ({
+  order,
+  removeOrderItem,
+  index,
+  setOpenItem,
+}) => {
   const topping = order.topping
     .filter((item) => item.checked)
     .map((item) => item.name)
     .join(', ');
 
   return (
-    <OrderItemStyled>
-      <ItemName>{order.name} {order.choice}</ItemName>
+    <OrderItemStyled
+      onClick={(e) =>
+        e.target.id === 'trash-button'
+          ? removeOrderItem(order.id)
+          : setOpenItem({ ...order, index })
+      }
+    >
+      <ItemName>
+        {order.name} {order.choice}
+      </ItemName>
       <span>{order.count}</span>
       <ItemPrice>{formatCurrency(totalPriceItems(order), 'RUB')}</ItemPrice>
-      <TrashButton onClick={() => removeOrderItem(order.id)}/>
+      <TrashButton
+        id="trash-button"
+        onClick={() => removeOrderItem(order.id)}
+      />
       {topping && <Toppings>Допы: {topping}</Toppings>}
     </OrderItemStyled>
   );

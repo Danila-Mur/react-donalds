@@ -49,7 +49,7 @@ const TotalPrice = styled.span`
   text-align: right;
 `;
 
-export const Order = ({ orders, removeOrderItem }) => {
+export const Order = ({ orders, setOrders, setOpenItem }) => {
   const total = orders.reduce(
     (result, order) => totalPriceItems(order) + result,
     0
@@ -60,6 +60,10 @@ export const Order = ({ orders, removeOrderItem }) => {
     0
   );
 
+  const removeOrderItem = (id) => {
+    setOrders((orders) => orders.filter((item) => item.id !== id));
+  };
+
   return (
     <>
       <OrderStyled>
@@ -67,8 +71,14 @@ export const Order = ({ orders, removeOrderItem }) => {
         <OrderContent>
           {orders.length ? (
             <OrderList>
-              {orders.map((order) => (
-                <OrderListItem order={order} removeOrderItem={removeOrderItem}/>
+              {orders.map((order, index) => (
+                <OrderListItem
+                  key={index}
+                  order={order}
+                  removeOrderItem={removeOrderItem}
+                  setOpenItem={setOpenItem}
+                  index={index}
+                />
               ))}
             </OrderList>
           ) : (
