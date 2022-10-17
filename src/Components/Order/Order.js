@@ -49,7 +49,7 @@ const TotalPrice = styled.span`
   text-align: right;
 `;
 
-export const Order = ({ orders }) => {
+export const Order = ({ orders, removeOrderItem }) => {
   const total = orders.reduce(
     (result, order) => totalPriceItems(order) + result,
     0
@@ -68,7 +68,7 @@ export const Order = ({ orders }) => {
           {orders.length ? (
             <OrderList>
               {orders.map((order) => (
-                <OrderListItem order={order} />
+                <OrderListItem order={order} removeOrderItem={removeOrderItem}/>
               ))}
             </OrderList>
           ) : (
