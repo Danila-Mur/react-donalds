@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import trashImage from '../../image/trash.svg';
 import {
@@ -53,12 +53,12 @@ export const OrderListItem = ({
     .map((item) => item.name)
     .join(', ');
 
+  const refDeleteButton = useRef(null);
+
   return (
     <OrderItemStyled
       onClick={(e) =>
-        e.target.id === 'trash-button'
-          ? removeOrderItem(order.id)
-          : setOpenItem({ ...order, index })
+        e.target !== refDeleteButton.current && setOpenItem({ ...order, index })
       }
     >
       <ItemName>
@@ -67,7 +67,7 @@ export const OrderListItem = ({
       <span>{order.count}</span>
       <ItemPrice>{formatCurrency(totalPriceItems(order), 'RUB')}</ItemPrice>
       <TrashButton
-        id="trash-button"
+        ref={refDeleteButton}
         onClick={() => removeOrderItem(order.id)}
       />
       {topping && <Toppings>Допы: {topping}</Toppings>}

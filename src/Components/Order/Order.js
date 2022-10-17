@@ -49,7 +49,13 @@ const TotalPrice = styled.span`
   text-align: right;
 `;
 
-export const Order = ({ orders, setOrders, setOpenItem }) => {
+export const Order = ({
+  orders,
+  setOrders,
+  setOpenItem,
+  authentication,
+  logIn,
+}) => {
   const total = orders.reduce(
     (result, order) => totalPriceItems(order) + result,
     0
@@ -90,7 +96,11 @@ export const Order = ({ orders, setOrders, setOpenItem }) => {
           <span>{totalCounter}</span>
           <TotalPrice>{formatCurrency(total, 'RUB')}</TotalPrice>
         </Total>
-        <ButtonCheckout>Оформить</ButtonCheckout>
+        <ButtonCheckout
+          onClick={() => (authentication ? console.log(orders) : logIn())}
+        >
+          Оформить
+        </ButtonCheckout>
       </OrderStyled>
     </>
   );
