@@ -5,7 +5,6 @@ import { OrderListItem } from './OrderListItem';
 import {
   totalPriceItems,
   formatCurrency,
-  projection,
 } from '../Functions/secondaryFunction';
 
 const OrderStyled = styled.section`
@@ -21,7 +20,7 @@ const OrderStyled = styled.section`
   box-shadow: 3px 4px 5px rgba(0, 0, 0, 0.25);
 `;
 
-const OrderTitle = styled.h2`
+export const OrderTitle = styled.h2`
   margin-bottom: 30px;
   text-align: center;
 `;
@@ -32,7 +31,7 @@ const OrderContent = styled.div`
 
 const OrderList = styled.ul``;
 
-const Total = styled.div`
+export const Total = styled.div`
   display: flex;
   margin: 0 35px 30px;
   & span:first-child {
@@ -44,23 +43,11 @@ const EmptyList = styled.p`
   text-align: center;
 `;
 
-const TotalPrice = styled.span`
+export const TotalPrice = styled.span`
   min-width: 65px;
   margin-left: 20px;
   text-align: right;
 `;
-
-const rulesData = {
-  itemName: ['name'],
-  price: ['price'],
-  count: ['count'],
-  topping: [
-    'topping',
-    (arr) => arr.filter((obj) => obj.checked).map((obj) => obj.name),
-    (arr) => (arr.length ? arr : 'no topping'),
-  ],
-  choice: ['choices', (item) => (item ? item : 'no choices')],
-};
 
 export const Order = ({
   orders,
@@ -68,22 +55,8 @@ export const Order = ({
   setOpenItem,
   authentication,
   logIn,
-  firebaseDatabase,
+  setOpenOrderConfirm,
 }) => {
-  const database = firebaseDatabase();
-
-  const sendOrder = () => {
-    const newOrder = orders.map(projection(rulesData));
-
-    database.ref('orders').push().set({
-      nameClient: authentication.displayName,
-      email: authentication.email,
-      order: newOrder,
-    });
-
-    setOrders([]);
-  };
-
   const total = orders.reduce(
     (result, order) => totalPriceItems(order) + result,
     0
@@ -125,7 +98,7 @@ export const Order = ({
           <TotalPrice>{formatCurrency(total, 'RUB')}</TotalPrice>
         </Total>
         <ButtonCheckout
-          onClick={() => (authentication ? sendOrder() : logIn())}
+          onClick={() => (authentication ? setOpenOrderConfirm(true) : logIn())}
         >
           Оформить
         </ButtonCheckout>
